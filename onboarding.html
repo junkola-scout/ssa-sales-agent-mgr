@@ -1,1 +1,725 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EB-5 Investor Onboarding | Secure Compliance Portal</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              900: '#134e4a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.125rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Public Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-brand-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <div class="font-bold text-slate-900 text-lg">Immigrant Investor Hub</div>
+            <p class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">Secure Compliance Portal</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-2 text-xs font-medium text-slate-500">
+          <svg class="w-4 h-4 text-brand-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <span class="hidden sm:inline">256-Bit Encrypted Data Entry</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    
+    <!-- Legal Disclaimer Banner -->
+    <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+      <div class="relative z-10">
+        <h2 class="text-xl font-bold tracking-tight mb-2">EB-5 Eligibility &amp; Onboarding Questionnaire</h2>
+        <p class="text-sm text-slate-300 max-w-3xl leading-relaxed mb-4">
+          Welcome to your secure compliance portal. This wizard allows our immigration counsel to pre-screen your eligibility for the EB-5 Immigrant Investor Program, evaluate concurrent filing opportunities, and prepare your Source of Funds audit strategy.
+        </p>
+        <div class="inline-flex items-center space-x-2 bg-brand-500/20 text-brand-300 border border-brand-400/30 rounded-lg px-3 py-1.5 text-xs font-semibold">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+          <span>Attorney-Client Privilege Appended</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Form Card (8 Columns) -->
+      <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-8">
+
+        <!-- Progress Tracker -->
+        <div>
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="wizardStepLabel">Step 1 of 5: Personal &amp; Current Immigration Status</span>
+            <span id="wizardPercentage" class="text-brand-600">20% Completed</span>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div id="wizardProgressBar" class="bg-brand-600 h-2 rounded-full transition-all duration-300 w-1/5"></div>
+          </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- STEP 1: PERSONAL & CURRENT IMMIGRATION STATUS -->
+        <!-- ================================================================= -->
+        <div id="intake-step-1" class="space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900">Personal &amp; Current Immigration Status</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              Used to determine concurrent filing eligibility (Form I-526E + I-485 / I-765) and assess processing timelines.
+            </p>
+          </div>
+
+          <!-- Full Legal Name -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">First Name (per passport)*</label>
+              <input type="text" id="intake_first_name" oninput="updateIntakeCalculations()" placeholder="e.g. Vikram" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Middle Name (optional)</label>
+              <input type="text" id="intake_middle_name" oninput="updateIntakeCalculations()" placeholder="e.g. Anand" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Last / Family Name*</label>
+              <input type="text" id="intake_last_name" oninput="updateIntakeCalculations()" placeholder="e.g. Patel" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>
+          </div>
+
+          <!-- Contact Coordinates -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Primary Email Address*</label>
+              <input type="email" id="intake_email" oninput="updateIntakeCalculations()" placeholder="name@example.com" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Phone Number*</label>
+              <input type="tel" id="intake_phone" oninput="updateIntakeCalculations()" placeholder="+1 (555) 000-0000" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>
+          </div>
+
+          <!-- Country of Birth & Citizenship -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Country of Birth*</label>
+              <select id="intake_country_birth" onchange="updateIntakeCalculations()" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                <option value="India">India</option>
+                <option value="China">China</option>
+                <option value="Vietnam">Vietnam</option>
+                <option value="Taiwan">Taiwan</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="South Korea">South Korea</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Other">All Other Countries</option>
+              </select>
+              <p class="text-xs text-slate-500 mt-1.5">Visa availability is determined by your country of birth.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Country of Current Citizenship*</label>
+              <input type="text" id="intake_citizenship" oninput="updateIntakeCalculations()" placeholder="e.g. India" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>
+          </div>
+
+          <!-- Location & Current U.S. Visa Status -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-3">Where are you currently located?*</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <label class="flex items-center p-3 rounded-lg border border-slate-300 bg-white cursor-pointer hover:border-brand-500 transition shadow-sm">
+                  <input type="radio" name="intake_location" value="inside_us" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500 mr-3">
+                  <span class="font-medium text-slate-800">Inside the United States</span>
+                </label>
+                <label class="flex items-center p-3 rounded-lg border border-slate-300 bg-white cursor-pointer hover:border-brand-500 transition shadow-sm">
+                  <input type="radio" name="intake_location" value="abroad" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500 mr-3">
+                  <span class="font-medium text-slate-800">Outside the U.S. / Abroad</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Visa Status (Only if inside US) -->
+            <div id="usVisaStatusBlock" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-200">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Current U.S. Visa Status</label>
+                <select id="intake_visa_status" onchange="updateIntakeCalculations()" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                  <option value="H-1B">H-1B Worker</option>
+                  <option value="L-1A">L-1A Executive</option>
+                  <option value="F-1">F-1 Student / OPT</option>
+                  <option value="E-2">E-2 Investor</option>
+                  <option value="O-1">O-1 Extraordinary Ability</option>
+                  <option value="B-1/B-2">B-1/B-2 Visitor</option>
+                  <option value="Other">Other Status</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Visa Expiration Date</label>
+                <input type="date" id="intake_visa_expiration" class="w-full text-sm border border-slate-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- STEP 2: CAPITAL INVESTMENT PROFILE -->
+        <!-- ================================================================= -->
+        <div id="intake-step-2" class="hidden space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900">Capital Investment Profile</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              Select your target investment threshold based on 2026 USCIS program rules.
+            </p>
+          </div>
+
+          <!-- Target Investment Amount -->
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-3">Target Investment Amount*</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <label class="p-5 rounded-xl border-2 border-brand-500 bg-brand-50/30 cursor-pointer flex flex-col justify-between hover:bg-brand-50 transition">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-center space-x-3">
+                    <input type="radio" name="intake_amount" value="800000" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                    <span class="font-bold text-slate-900 text-base">$800,000 USD</span>
+                  </div>
+                  <span class="text-brand-700 font-bold text-xs bg-brand-100 px-2 py-1 rounded">Recommended</span>
+                </div>
+                <div class="ml-7 text-sm text-slate-600">
+                  Targeted Employment Area (TEA). Qualifies for 20% Rural or 10% High-Unemployment reserved visas.
+                </div>
+              </label>
+
+              <label class="p-5 rounded-xl border border-slate-300 bg-white cursor-pointer flex flex-col justify-between hover:border-slate-400 transition shadow-sm">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-center space-x-3">
+                    <input type="radio" name="intake_amount" value="1050000" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                    <span class="font-bold text-slate-900 text-base">$1,050,000 USD</span>
+                  </div>
+                </div>
+                <div class="ml-7 text-sm text-slate-500">
+                  Standard metropolitan project located outside designated TEAs. Subject to standard processing.
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Investment Structure Preference -->
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-3">Investment Structure Preference*</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <label class="p-4 rounded-xl border border-slate-300 bg-white hover:border-brand-500 cursor-pointer shadow-sm transition">
+                <div class="flex items-center space-x-3 mb-1">
+                  <input type="radio" name="intake_structure" value="regional_center" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                  <span class="font-bold text-slate-900 text-sm">Regional Center (Passive)</span>
+                </div>
+                <p class="text-xs text-slate-500 ml-7">
+                  Passive investment where job creation is managed for you via modeling.
+                </p>
+              </label>
+
+              <label class="p-4 rounded-xl border border-slate-300 bg-white hover:border-brand-500 cursor-pointer shadow-sm transition">
+                <div class="flex items-center space-x-3 mb-1">
+                  <input type="radio" name="intake_structure" value="direct_eb5" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                  <span class="font-bold text-slate-900 text-sm">Standalone / Direct</span>
+                </div>
+                <p class="text-xs text-slate-500 ml-7">
+                  You own and operate the business, directly employing 10 W-2 workers.
+                </p>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Liquidity Timeline -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
+            <label class="block text-sm font-bold text-slate-800 mb-1">Liquidity Readiness &amp; Escrow Timeline*</label>
+            <p class="text-sm text-slate-500 mb-4">Are your investment funds currently liquid and ready for escrow wire transfer?</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+              <label class="flex items-center p-3 rounded-lg border border-slate-300 bg-white cursor-pointer hover:border-brand-500 transition shadow-sm">
+                <input type="radio" name="intake_liquidity" value="immediate" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500 mr-2">
+                <span class="font-medium text-slate-800">Liquid (&lt; 30 Days)</span>
+              </label>
+
+              <label class="flex items-center p-3 rounded-lg border border-slate-300 bg-white cursor-pointer hover:border-brand-500 transition shadow-sm">
+                <input type="radio" name="intake_liquidity" value="1_to_3_months" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500 mr-2">
+                <span class="font-medium text-slate-800">1 to 3 Months</span>
+              </label>
+
+              <label class="flex items-center p-3 rounded-lg border border-slate-300 bg-white cursor-pointer hover:border-brand-500 transition shadow-sm">
+                <input type="radio" name="intake_liquidity" value="asset_liquidation" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 focus:ring-brand-500 mr-2">
+                <span class="font-medium text-slate-800">Pending Sale (3-6 mo)</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- STEP 3: SOURCE OF FUNDS (SOF) PRE-SCREENING -->
+        <!-- ================================================================= -->
+        <div id="intake-step-3" class="hidden space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900">Source of Funds (SOF) Verification</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              Lawful source of capital must be proven to USCIS. Please identify your primary funding origins.
+            </p>
+          </div>
+
+          <!-- Primary Sources of Capital (Checkboxes) -->
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-3">Primary Origin of EB-5 Capital (Select all that apply)*</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              
+              <label class="flex items-start p-4 rounded-xl border border-slate-300 bg-white hover:border-brand-500 cursor-pointer shadow-sm transition">
+                <input type="checkbox" id="sof_salary" checked onchange="updateIntakeCalculations()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 mt-0.5 mr-3">
+                <div>
+                  <span class="font-semibold text-slate-900 block text-sm">Employment &amp; Savings</span>
+                  <span class="text-xs text-slate-500">W-2 / salary stubs, bonuses</span>
+                </div>
+              </label>
+
+              <label class="flex items-start p-4 rounded-xl border border-slate-300 bg-white hover:border-brand-500 cursor-pointer shadow-sm transition">
+                <input type="checkbox" id="sof_realestate" onchange="updateIntakeCalculations()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 mt-0.5 mr-3">
+                <div>
+                  <span class="font-semibold text-slate-900 block text-sm">Real Estate Sale or Loan</span>
+                  <span class="text-xs text-slate-500">Property deed sale or equity loan</span>
+                </div>
+              </label>
+
+              <label class="flex items-start p-4 rounded-xl border border-slate-300 bg-white hover:border-brand-500 cursor-pointer shadow-sm transition">
+                <input type="checkbox" id="sof_dividends" onchange="updateIntakeCalculations()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 mt-0.5 mr-3">
+                <div>
+                  <span class="font-semibold text-slate-900 block text-sm">Business Sale or Dividends</span>
+                  <span class="text-xs text-slate-500">Retained earnings, M&amp;A proceeds</span>
+                </div>
+              </label>
+
+              <label class="flex items-start p-4 rounded-xl border border-slate-300 bg-white hover:border-brand-500 cursor-pointer shadow-sm transition">
+                <input type="checkbox" id="sof_gift" onchange="updateIntakeCalculations()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 mt-0.5 mr-3">
+                <div>
+                  <span class="font-semibold text-slate-900 block text-sm">Family Gift</span>
+                  <span class="text-xs text-slate-500">Unconditional gift from relative</span>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Documentary Health Check -->
+          <div class="bg-slate-50 rounded-xl border border-slate-200 p-5 space-y-4">
+            <span class="text-sm font-bold text-slate-800 flex items-center">
+              <svg class="w-5 h-5 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Documentary Health Check
+            </span>
+
+            <div class="space-y-4 text-sm">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-700 pr-4">Can you provide personal tax returns for the last <strong>5 to 7 years</strong>?</span>
+                <div class="flex items-center space-x-4 shrink-0">
+                  <label class="flex items-center cursor-pointer"><input type="radio" name="chk_tax" value="yes" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-medium">Yes</span></label>
+                  <label class="flex items-center cursor-pointer"><input type="radio" name="chk_tax" value="no" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-medium">No</span></label>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between border-t border-slate-200 pt-4">
+                <span class="text-slate-700 pr-4">Can you provide an unbroken bank statement trail for the capital?</span>
+                <div class="flex items-center space-x-4 shrink-0">
+                  <label class="flex items-center cursor-pointer"><input type="radio" name="chk_trail" value="yes" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-medium">Yes</span></label>
+                  <label class="flex items-center cursor-pointer"><input type="radio" name="chk_trail" value="no" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-medium">No</span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- STEP 4: BACKGROUND & INADMISSIBILITY SCREENING -->
+        <!-- ================================================================= -->
+        <div id="intake-step-4" class="hidden space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900">Background Screening</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              Standard compliance questions required for US admissibility.
+            </p>
+          </div>
+
+          <!-- Criminal Screening -->
+          <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <label class="text-sm font-bold text-slate-800">
+                1. Have you ever been arrested, charged, or convicted of any offense?*
+              </label>
+              <div class="flex items-center space-x-4 shrink-0">
+                <label class="flex items-center cursor-pointer"><input type="radio" name="bg_criminal" value="no" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-semibold text-slate-700">No</span></label>
+                <label class="flex items-center cursor-pointer"><input type="radio" name="bg_criminal" value="yes" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-semibold text-slate-700">Yes</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- OFAC Sanctions Screening -->
+          <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <label class="text-sm font-bold text-slate-800">
+                2. Do you hold citizenship in a country subject to U.S. OFAC sanctions?*
+              </label>
+              <div class="flex items-center space-x-4 shrink-0">
+                <label class="flex items-center cursor-pointer"><input type="radio" name="bg_ofac" value="no" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-semibold text-slate-700">No</span></label>
+                <label class="flex items-center cursor-pointer"><input type="radio" name="bg_ofac" value="yes" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-semibold text-slate-700">Yes</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- PEP Screening -->
+          <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <label class="text-sm font-bold text-slate-800">
+                3. Are you a current or former government official (PEP)?*
+              </label>
+              <div class="flex items-center space-x-4 shrink-0">
+                <label class="flex items-center cursor-pointer"><input type="radio" name="bg_pep" value="no" checked onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-semibold text-slate-700">No</span></label>
+                <label class="flex items-center cursor-pointer"><input type="radio" name="bg_pep" value="yes" onchange="updateIntakeCalculations()" class="w-4 h-4 text-brand-600 mr-2"><span class="font-semibold text-slate-700">Yes</span></label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- STEP 5: DOCUMENT UPLOAD & SUBMIT -->
+        <!-- ================================================================= -->
+        <div id="intake-step-5" class="hidden space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900">Document Upload &amp; Submission</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              Provide preliminary identification for our legal team to begin your file.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Passport Upload -->
+            <div class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <div class="w-12 h-12 mx-auto rounded-full bg-brand-100 text-brand-600 flex items-center justify-center mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+              </div>
+              <h4 class="text-sm font-bold text-slate-800">Passport Bio Page (PDF/JPG)</h4>
+              <p class="text-xs text-slate-500 mt-1">Clear copy matching biographical data</p>
+              <div class="mt-3 inline-flex items-center text-xs font-semibold text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-200">
+                Click to browse files
+              </div>
+            </div>
+
+            <!-- Proof of Funds Upload -->
+            <div class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <div class="w-12 h-12 mx-auto rounded-full bg-slate-200 text-slate-600 flex items-center justify-center mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <h4 class="text-sm font-bold text-slate-800">Proof of Funds Summary</h4>
+              <p class="text-xs text-slate-500 mt-1">High-level liquid asset statement</p>
+              <div class="mt-3 inline-flex items-center text-xs font-semibold text-slate-700 bg-white border border-slate-300 px-3 py-1.5 rounded-lg">
+                Click to browse files
+              </div>
+            </div>
+          </div>
+
+          <!-- Certifications -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-sm space-y-2 mt-4">
+            <label class="flex items-start text-slate-700 cursor-pointer">
+              <input type="checkbox" id="intake_certify" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 mt-0.5 mr-3">
+              <span>
+                I certify that all information provided is true and correct. I consent to having this data securely reviewed by licensed immigration counsel for pre-screening purposes.
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Wizard Navigation -->
+        <div class="flex items-center justify-between pt-6 border-t border-slate-200">
+          <button onclick="prevStep()" id="prevStepBtn" class="px-5 py-2.5 text-sm font-semibold rounded-lg text-slate-500 bg-slate-100 cursor-not-allowed opacity-50 transition" disabled>
+            Back
+          </button>
+
+          <button onclick="nextStep()" id="nextStepBtn" class="px-6 py-2.5 text-sm font-semibold rounded-lg bg-brand-600 hover:bg-brand-700 text-white shadow-sm flex items-center space-x-2 transition">
+            <span>Continue</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+
+          <button onclick="submitForm()" id="submitFormBtn" class="hidden px-6 py-2.5 text-sm font-semibold rounded-lg bg-slate-900 hover:bg-slate-800 text-white shadow-lg flex items-center space-x-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <span>Submit Secure Application</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right Side: Real-time Readiness Profile (4 Columns) -->
+      <div class="lg:col-span-4 space-y-6">
+        
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sticky top-24">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+            <h4 class="font-bold text-slate-900">Your Readiness Profile</h4>
+            <span id="readinessScore" class="pill-badge bg-brand-50 text-brand-700 border border-brand-200 font-mono font-bold">Strong Match</span>
+          </div>
+
+          <div class="space-y-4 text-sm" id="complianceFlagsContainer">
+            <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-100 flex items-start space-x-3">
+              <svg class="w-5 h-5 text-emerald-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <div>
+                <strong class="text-emerald-900 block mb-0.5" id="concurrentEligibilityFlag">Concurrent Filing Eligible</strong>
+                <span class="text-emerald-700 text-xs" id="concurrentExplanation">You are physically in the U.S. and may qualify for a simultaneous work permit and travel document.</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start space-x-3">
+              <svg class="w-5 h-5 text-slate-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+              <div>
+                <strong class="text-slate-800 block mb-0.5" id="countryBacklogFlag">Country Check: India</strong>
+                <span class="text-slate-600 text-xs" id="countryBacklogExplanation">Rural TEA projects currently bypass historic backlogs for your region.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">Next Steps After Submission</h5>
+            <ol class="text-xs text-slate-600 space-y-2 list-decimal list-inside">
+              <li>Attorney review of questionnaire.</li>
+              <li>Secure portal invitation for SOF docs.</li>
+              <li>Project Due Diligence scheduling.</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Success Toast -->
+  <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden transition-all duration-300">
+    <div class="bg-slate-900 text-white px-5 py-4 rounded-xl shadow-2xl border border-slate-700 flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <div>
+        <p class="font-bold text-sm">Application Securely Submitted!</p>
+        <p class="text-xs text-slate-300">Our team will be in contact shortly.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    window.onload = function() {
+      updateIntakeCalculations();
+    };
+
+    function goToIntakeStep(stepNumber) {
+      if (stepNumber < 1 || stepNumber > totalSteps) return;
+      currentStep = stepNumber;
+
+      // Update Step Visibility
+      for (let i = 1; i <= totalSteps; i++) {
+        const stepEl = document.getElementById(`intake-step-${i}`);
+        if (i === currentStep) {
+          stepEl.classList.remove('hidden');
+        } else {
+          stepEl.classList.add('hidden');
+        }
+      }
+
+      // Update Progress Bar & Labels
+      const stepLabels = [
+        "Personal & Current Immigration Status",
+        "Capital Investment Profile",
+        "Source of Funds Verification",
+        "Background Screening",
+        "Document Upload & Submission"
+      ];
+      document.getElementById('wizardStepLabel').innerText = `Step ${currentStep} of ${totalSteps}: ${stepLabels[currentStep - 1]}`;
+      const pct = Math.round((currentStep / totalSteps) * 100);
+      document.getElementById('wizardPercentage').innerText = `${pct}% Completed`;
+      document.getElementById('wizardProgressBar').style.width = `${pct}%`;
+
+      // Update Next / Prev Buttons
+      const prevBtn = document.getElementById('prevStepBtn');
+      const nextBtn = document.getElementById('nextStepBtn');
+      const submitBtn = document.getElementById('submitFormBtn');
+
+      if (currentStep === 1) {
+        prevBtn.disabled = true;
+        prevBtn.className = "px-5 py-2.5 text-sm font-semibold rounded-lg text-slate-400 bg-slate-100 cursor-not-allowed transition";
+      } else {
+        prevBtn.disabled = false;
+        prevBtn.className = "px-5 py-2.5 text-sm font-semibold rounded-lg text-slate-700 bg-slate-200 hover:bg-slate-300 transition cursor-pointer";
+      }
+
+      if (currentStep === totalSteps) {
+        nextBtn.classList.add('hidden');
+        submitBtn.classList.remove('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+        submitBtn.classList.add('hidden');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps) goToIntakeStep(currentStep + 1);
+    }
+
+    function prevStep() {
+      if (currentStep > 1) goToIntakeStep(currentStep - 1);
+    }
+
+    function updateIntakeCalculations() {
+      const countryBirth = document.getElementById('intake_country_birth')?.value || "India";
+      const locationEl = document.querySelector('input[name="intake_location"]:checked');
+      const isInsideUs = locationEl ? locationEl.value === 'inside_us' : true;
+      const visaStatus = document.getElementById('intake_visa_status')?.value || "H-1B";
+
+      // Show/hide visa status dropdown
+      const visaBlock = document.getElementById('usVisaStatusBlock');
+      if (visaBlock) {
+        visaBlock.style.display = isInsideUs ? 'grid' : 'none';
+      }
+
+      // Checkboxes & Radios
+      const amountEl = document.querySelector('input[name="intake_amount"]:checked');
+      const investmentAmount = amountEl ? parseInt(amountEl.value, 10) : 800000;
+      
+      const taxChecked = document.querySelector('input[name="chk_tax"]:checked')?.value === 'yes';
+      const trailChecked = document.querySelector('input[name="chk_trail"]:checked')?.value === 'yes';
+      const criminalChecked = document.querySelector('input[name="bg_criminal"]:checked')?.value === 'yes';
+      const ofacChecked = document.querySelector('input[name="bg_ofac"]:checked')?.value === 'yes';
+
+      // Concurrent filing calculation
+      const concurrentEligible = isInsideUs && ['H-1B', 'L-1A', 'F-1', 'E-2', 'O-1'].includes(visaStatus);
+      const concurrentFlagEl = document.getElementById('concurrentEligibilityFlag');
+      const concurrentExpEl = document.getElementById('concurrentExplanation');
+
+      if (concurrentFlagEl && concurrentExpEl) {
+        if (concurrentEligible) {
+          concurrentFlagEl.innerText = "Concurrent Filing Eligible";
+          concurrentExpEl.innerText = `You are physically in the U.S. on a valid visa and may qualify for a simultaneous work permit and travel document.`;
+          concurrentFlagEl.parentElement.parentElement.className = "p-3 rounded-lg bg-emerald-50 border border-emerald-100 flex items-start space-x-3";
+          concurrentFlagEl.previousElementSibling.classList.replace('text-amber-500', 'text-emerald-600');
+          concurrentFlagEl.previousElementSibling.classList.replace('text-slate-400', 'text-emerald-600');
+        } else if (isInsideUs) {
+          concurrentFlagEl.innerText = "Status Review Required";
+          concurrentExpEl.innerText = "You are inside the U.S. but your status may require a 90-day intent check by our attorneys.";
+          concurrentFlagEl.parentElement.parentElement.className = "p-3 rounded-lg bg-amber-50 border border-amber-100 flex items-start space-x-3";
+          concurrentFlagEl.previousElementSibling.classList.replace('text-emerald-600', 'text-amber-500');
+        } else {
+          concurrentFlagEl.innerText = "Consular Processing";
+          concurrentExpEl.innerText = "You are currently abroad and will proceed through standard U.S. Embassy interviews.";
+          concurrentFlagEl.parentElement.parentElement.className = "p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start space-x-3";
+          concurrentFlagEl.previousElementSibling.classList.replace('text-emerald-600', 'text-slate-400');
+        }
+      }
+
+      // Country advisory
+      const countryFlagEl = document.getElementById('countryBacklogFlag');
+      const countryExpEl = document.getElementById('countryBacklogExplanation');
+      if (countryFlagEl && countryExpEl) {
+        countryFlagEl.innerText = `Country Profile: ${countryBirth}`;
+        if (countryBirth === "India" || countryBirth === "China") {
+          countryExpEl.innerText = `As a high-demand country, a Rural TEA project ($800k) is highly recommended to bypass historical visa lines.`;
+        } else {
+          countryExpEl.innerText = `Your country profile is 'Current', meaning you face no historical backlogs for visa issuance.`;
+        }
+      }
+
+      // Calculate generic readiness
+      let isReady = true;
+      if (criminalChecked || ofacChecked || !taxChecked || !trailChecked) {
+        isReady = false;
+      }
+
+      const scoreBadge = document.getElementById('readinessScore');
+      if (scoreBadge) {
+        if (isReady) {
+          scoreBadge.innerText = `Strong Match`;
+          scoreBadge.className = "pill-badge bg-brand-50 text-brand-700 border border-brand-200 font-mono font-bold";
+        } else {
+          scoreBadge.innerText = `Review Required`;
+          scoreBadge.className = "pill-badge bg-amber-50 text-amber-700 border border-amber-200 font-mono font-bold";
+        }
+      }
+    }
+
+    function submitForm() {
+      const toast = document.getElementById('toastBox');
+      toast.classList.remove('hidden');
+      
+      const btn = document.getElementById('submitFormBtn');
+      btn.innerHTML = `<svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...`;
+      
+      setTimeout(() => {
+        btn.innerHTML = `<span>Application Securely Submitted</span>`;
+        btn.classList.replace('bg-slate-900', 'bg-emerald-600');
+        btn.classList.replace('hover:bg-slate-800', 'hover:bg-emerald-700');
+      }, 1000);
+
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
