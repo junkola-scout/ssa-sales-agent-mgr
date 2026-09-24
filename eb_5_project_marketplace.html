@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EB-5 Project Marketplace | Offerings Catalog</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Official USWDS Fonts (Public Sans / Source Sans Pro) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons for E-commerce elements (Bookmarking, Filters) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Public Sans"', '"Source Sans 3"', 'Arial', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f8fa',
+              100: '#d6e3ec',
+              200: '#b8cfde',
+              300: '#7aa5c1',
+              400: '#3d7ca5',
+              500: '#005288', // DHS Primary Blue
+              600: '#003e67',
+              700: '#002b47',
+              800: '#001726',
+              900: '#000305',
+            },
+            accent: {
+              red: '#c41230', // DHS Secondary Red
+              green: '#5e9732', // DHS Secondary Green
+              gray: '#5a5b5d' // DHS Dark Gray
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Public Sans', 'Source Sans 3', Arial, sans-serif;
+      background-color: #f1f3f4;
+      -webkit-font-smoothing: antialiased;
+      color: #1b1b1b;
+    }
+    
+    /* USWDS Component Styling Overrides */
+    .uswds-btn {
+      border-radius: 4px; 
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+    }
+    .uswds-card {
+      border-radius: 4px;
+      border: 1px solid #c0c2c4;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      background-color: #ffffff;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .uswds-card:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Custom Checkboxes */
+    input[type="checkbox"] {
+      width: 1.125rem;
+      height: 1.125rem;
+      accent-color: #005288;
+      cursor: pointer;
+    }
+    
+    /* E-commerce product image overlay */
+    .product-img-container {
+      position: relative;
+      overflow: hidden;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+    .bookmark-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5a5b5d;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .bookmark-btn:hover {
+      color: #005288;
+      transform: scale(1.05);
+    }
+    .bookmark-btn.saved {
+      color: #c41230;
+      background: #ffffff;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb { background: #c0c2c4; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <!-- US Government Banner Mock -->
+  <div class="bg-[#1b1b1b] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-[11px] flex items-center space-x-2">
+    <i class="ph-fill ph-flag text-[14px]"></i>
+    <span>An official platform for Immigrant Investor Program Compliance</span>
+  </div>
+
+  <!-- Public Header -->
+  <header class="bg-brand-500 border-b border-brand-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-white flex items-center justify-center text-brand-600 font-bold text-xl rounded-sm">
+            EB-5
+          </div>
+          <div>
+            <div class="font-bold text-white text-xl tracking-tight">Immigrant Investor Hub</div>
+            <p class="text-xs text-brand-100 uppercase tracking-widest font-semibold mt-0.5">Verified Project Marketplace</p>
+          </div>
+        </div>
+        
+        <!-- Navigation & E-Commerce Watchlist -->
+        <div class="flex items-center space-x-6 text-white font-medium text-sm">
+          <a href="#" class="hover:text-brand-100 transition hidden md:block">Onboarding Status</a>
+          <a href="#" class="hover:text-brand-100 transition hidden md:block">Resource Center</a>
+          
+          <button onclick="toggleWatchlist()" class="flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-sm border border-brand-400 transition relative">
+            <i class="ph ph-bookmark-simple text-lg"></i>
+            <span>My Watchlist</span>
+            <span id="watchlistCount" class="absolute -top-2 -right-2 bg-accent-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-brand-500">0</span>
+          </button>
+          
+          <!-- User Profile -->
+          <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center border border-brand-400 cursor-pointer">
+            <i class="ph-fill ph-user text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    
+    <!-- Hero / Featured Offerings Section -->
+    <section>
+      <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-[#1b1b1b] font-['Source_Sans_3']">Featured Opportunities</h2>
+          <p class="text-accent-gray mt-1">Highly-vetted offerings currently accepting I-526E subscriptions.</p>
+        </div>
+        <a href="#catalog" class="text-brand-500 font-bold text-sm hover:underline flex items-center">
+          View Full Catalog <i class="ph-bold ph-arrow-right ml-1"></i>
+        </a>
+      </div>
+
+      <!-- Featured Grid (3 Items) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="featuredGrid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <hr class="border-gray-300">
+
+    <!-- Catalog Section -->
+    <section id="catalog" class="pt-4">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-[#1b1b1b] font-['Source_Sans_3']">Explore All Investments</h2>
+        <p class="text-accent-gray mt-1">Use the filters below to align projects with your immigration timelines and risk tolerance.</p>
+      </div>
+
+      <div class="flex flex-col lg:flex-row gap-8">
+        
+        <!-- Sidebar Filters -->
+        <aside class="w-full lg:w-72 shrink-0">
+          <div class="bg-white uswds-card p-5 space-y-6 sticky top-28">
+            <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+              <h3 class="font-bold text-[#1b1b1b] flex items-center"><i class="ph-bold ph-funnel mr-2 text-brand-500"></i> Filter Offerings</h3>
+              <button onclick="resetFilters()" class="text-xs font-bold text-brand-500 hover:underline">Clear All</button>
+            </div>
+
+            <!-- Filter Category: Visa Set-Aside / TEA Status -->
+            <div>
+              <h4 class="text-xs font-bold text-accent-gray uppercase tracking-wider mb-3">Visa Category (TEA)</h4>
+              <div class="space-y-2 text-sm text-[#1b1b1b]">
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="tea" value="Rural" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Rural (20% Reserved)</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="tea" value="High Unemployment" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">High Unemployment (10%)</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="tea" value="Infrastructure" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Infrastructure (2%)</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="tea" value="Standard" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Standard (Non-TEA)</span></label>
+              </div>
+            </div>
+
+            <!-- Filter Category: Asset Class -->
+            <div>
+              <h4 class="text-xs font-bold text-accent-gray uppercase tracking-wider mb-3">Industry / Asset Class</h4>
+              <div class="space-y-2 text-sm text-[#1b1b1b]">
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="asset" value="Real Estate" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Real Estate (Hospitality/Res)</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="asset" value="Technology" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Technology & MedTech</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="asset" value="Energy" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Clean Energy & Infra</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="asset" value="Manufacturing" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Manufacturing & Operations</span></label>
+              </div>
+            </div>
+
+            <!-- Filter Category: Capital Stack Position -->
+            <div>
+              <h4 class="text-xs font-bold text-accent-gray uppercase tracking-wider mb-3">Capital Position (Risk)</h4>
+              <div class="space-y-2 text-sm text-[#1b1b1b]">
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="stack" value="Senior Debt" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Senior Debt (1st Lien)</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="stack" value="Mezzanine" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Mezzanine Debt</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="stack" value="Preferred Equity" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Preferred Equity</span></label>
+              </div>
+            </div>
+
+            <!-- Filter Category: Investment Structure -->
+            <div>
+              <h4 class="text-xs font-bold text-accent-gray uppercase tracking-wider mb-3">Investment Structure</h4>
+              <div class="space-y-2 text-sm text-[#1b1b1b]">
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="struct" value="Regional Center" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Regional Center (Passive)</span></label>
+                <label class="flex items-center group"><input type="checkbox" class="filter-cb" data-group="struct" value="Direct EB-5" onchange="applyFilters()"><span class="ml-2 group-hover:text-brand-500">Direct EB-5 (Active)</span></label>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Project Grid -->
+        <div class="flex-1">
+          <!-- Active Filter Tags Area -->
+          <div id="activeFiltersContainer" class="mb-4 flex flex-wrap gap-2 empty:hidden"></div>
+          
+          <!-- Results Count -->
+          <div class="flex justify-between items-center mb-4 text-sm">
+            <span class="font-bold text-accent-gray" id="resultCountText">Showing all projects</span>
+            <select class="border border-gray-300 rounded-sm px-2 py-1 bg-white focus:outline-none focus:border-brand-500">
+              <option>Sort by: Newest</option>
+              <option>Sort by: Highest Job Cushion</option>
+              <option>Sort by: Target ROI</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="catalogGrid">
+            <!-- Injected via JS -->
+          </div>
+          
+          <!-- Empty State -->
+          <div id="emptyState" class="hidden text-center py-16 bg-white uswds-card border-dashed">
+            <i class="ph-light ph-magnifying-glass text-4xl text-gray-400 mb-3"></i>
+            <h3 class="font-bold text-lg">No projects match your criteria</h3>
+            <p class="text-accent-gray mt-1">Try adjusting your filters or clearing them to see more offerings.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-brand-100 text-brand-700 font-bold rounded-sm hover:bg-brand-200 transition">Clear Filters</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#1b1b1b] text-gray-300 py-8 mt-12 border-t-4 border-brand-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center">
+      <div>
+        <div class="font-bold text-white text-lg tracking-tight flex items-center justify-center sm:justify-start">
+          <div class="w-6 h-6 bg-white text-brand-600 flex items-center justify-center rounded-sm mr-2 text-xs">EB</div>
+          Immigrant Investor Hub
+        </div>
+        <p class="text-xs mt-2 max-w-md">This marketplace is a secure portal for prospective investors to evaluate EB-5 offerings. This does not constitute financial or legal advice.</p>
+      </div>
+      <div class="mt-4 sm:mt-0 flex space-x-6 text-sm">
+        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+        <a href="#" class="hover:text-white transition">Terms of Service</a>
+        <a href="#" class="hover:text-white transition">Contact Legal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- Mock Database of EB-5 Projects (~10 items for demo) ---
+    const projectsDatabase = [
+      {
+        id: 'p1',
+        title: 'Yellowstone River Valley Rural Resort',
+        developer: 'Highland Hospitality Group',
+        image: 'https://placehold.co/600x400/003e67/ffffff?text=Rural+Resort+Development',
+        teaStatus: 'Rural',
+        assetClass: 'Real Estate',
+        structure: 'Regional Center',
+        stack: 'Senior Debt',
+        cushion: 140, // percentage buffer
+        roi: '4.5%',
+        raise: '$30M',
+        featured: true
+      },
+      {
+        id: 'p2',
+        title: 'Silicon Valley Clean Energy Hub',
+        developer: 'EcoGrid Infrastructure Partners',
+        image: 'https://placehold.co/600x400/3d7ca5/ffffff?text=Clean+Energy+Infra',
+        teaStatus: 'Infrastructure',
+        assetClass: 'Energy',
+        structure: 'Regional Center',
+        stack: 'Preferred Equity',
+        cushion: 85,
+        roi: '6.0%',
+        raise: '$45M',
+        featured: true
+      },
+      {
+        id: 'p3',
+        title: 'Texas Advanced MedTech Manufacturing',
+        developer: 'BioWorks Texas',
+        image: 'https://placehold.co/600x400/5a5b5d/ffffff?text=MedTech+Facility',
+        teaStatus: 'High Unemployment',
+        assetClass: 'Technology',
+        structure: 'Regional Center',
+        stack: 'Mezzanine',
+        cushion: 110,
+        roi: '5.5%',
+        raise: '$20M',
+        featured: true
+      },
+      {
+        id: 'p4',
+        title: 'Miami Waterfront Mixed-Use Tower',
+        developer: 'Atlantic Urban Developers',
+        image: 'https://placehold.co/600x400/005288/ffffff?text=Mixed-Use+Tower',
+        teaStatus: 'High Unemployment',
+        assetClass: 'Real Estate',
+        structure: 'Regional Center',
+        stack: 'Senior Debt',
+        cushion: 60,
+        roi: '4.0%',
+        raise: '$80M',
+        featured: false
+      },
+      {
+        id: 'p5',
+        title: 'Denver SaaS Enterprise Data Center',
+        developer: 'CloudScale Direct',
+        image: 'https://placehold.co/600x400/c41230/ffffff?text=Data+Center',
+        teaStatus: 'Standard',
+        assetClass: 'Technology',
+        structure: 'Direct EB-5',
+        stack: 'Senior Debt',
+        cushion: 35,
+        roi: '8.0%',
+        raise: '$5M',
+        featured: false
+      },
+      {
+        id: 'p6',
+        title: 'Midwest Auto Parts Manufacturing Plant',
+        developer: 'Horizon Industrial',
+        image: 'https://placehold.co/600x400/5e9732/ffffff?text=Manufacturing+Plant',
+        teaStatus: 'Rural',
+        assetClass: 'Manufacturing',
+        structure: 'Regional Center',
+        stack: 'Senior Debt',
+        cushion: 160,
+        roi: '4.2%',
+        raise: '$15M',
+        featured: false
+      },
+      {
+        id: 'p7',
+        title: 'Seattle Broadband Expansion Initiative',
+        developer: 'Pacific Northwest Infra',
+        image: 'https://placehold.co/600x400/7aa5c1/ffffff?text=Broadband+Infra',
+        teaStatus: 'Infrastructure',
+        assetClass: 'Energy', // grouping infra here for simplicity
+        structure: 'Regional Center',
+        stack: 'Mezzanine',
+        cushion: 90,
+        roi: '5.0%',
+        raise: '$25M',
+        featured: false
+      },
+      {
+        id: 'p8',
+        title: 'Chicago Boutique Hotel Collection',
+        developer: 'Windy City Hospitality',
+        image: 'https://placehold.co/600x400/001726/ffffff?text=Boutique+Hotel',
+        teaStatus: 'High Unemployment',
+        assetClass: 'Real Estate',
+        structure: 'Regional Center',
+        stack: 'Preferred Equity',
+        cushion: 45,
+        roi: '7.5%',
+        raise: '$18M',
+        featured: false
+      }
+    ];
+
+    // --- State ---
+    let watchlist = new Set();
+    
+    // --- Helper: Get Badge Colors ---
+    function getTeaBadgeColor(status) {
+      switch(status) {
+        case 'Rural': return 'bg-brand-100 text-brand-700 border-brand-300';
+        case 'High Unemployment': return 'bg-orange-100 text-orange-800 border-orange-300';
+        case 'Infrastructure': return 'bg-purple-100 text-purple-800 border-purple-300';
+        default: return 'bg-gray-100 text-gray-700 border-gray-300';
+      }
+    }
+
+    // --- Component: Render a Project Card ---
+    function generateCardHTML(project) {
+      const isSaved = watchlist.has(project.id);
+      const bookmarkIcon = isSaved ? 'ph-fill ph-bookmark' : 'ph-bold ph-bookmark-simple';
+      const bookmarkClass = isSaved ? 'bookmark-btn saved' : 'bookmark-btn';
+      
+      // Calculate investment amount text based on TEA status
+      const investAmount = (project.teaStatus === 'Standard') ? '$1.05M' : '$800k';
+
+      return `
+        <div class="uswds-card flex flex-col group">
+          <div class="product-img-container h-48 bg-gray-200">
+            <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <button class="${bookmarkClass}" onclick="toggleBookmark('${project.id}', this)" title="${isSaved ? 'Remove from Watchlist' : 'Add to Watchlist'}">
+              <i class="${bookmarkIcon} text-xl"></i>
+            </button>
+            <div class="absolute bottom-3 left-3 flex gap-2">
+              <span class="pill-badge ${getTeaBadgeColor(project.teaStatus)} shadow-sm bg-white/90 backdrop-blur-sm border">
+                ${project.teaStatus === 'Standard' ? 'Standard' : project.teaStatus + ' TEA'}
+              </span>
+              <span class="pill-badge bg-white/90 text-[#1b1b1b] border shadow-sm backdrop-blur-sm flex items-center">
+                <i class="ph-fill ph-users mr-1 text-accent-green"></i> ${project.cushion}% Job Buffer
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start mb-1">
+              <span class="text-xs font-bold text-accent-gray uppercase tracking-wider">${project.assetClass}</span>
+              <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-sm">${project.structure}</span>
+            </div>
+            
+            <h3 class="text-lg font-bold text-[#1b1b1b] leading-snug mb-1 font-['Source_Sans_3']">${project.title}</h3>
+            <p class="text-sm text-accent-gray mb-4">Developed by ${project.developer}</p>
+            
+            <div class="grid grid-cols-3 gap-2 border-y border-gray-100 py-3 mb-4 mt-auto">
+              <div class="text-center">
+                <span class="block text-[10px] text-accent-gray uppercase font-bold">Invest</span>
+                <span class="block font-bold text-[#1b1b1b]">${investAmount}</span>
+              </div>
+              <div class="text-center border-l border-r border-gray-100">
+                <span class="block text-[10px] text-accent-gray uppercase font-bold">Position</span>
+                <span class="block font-bold text-[#1b1b1b] truncate px-1" title="${project.stack}">${project.stack}</span>
+              </div>
+              <div class="text-center">
+                <span class="block text-[10px] text-accent-gray uppercase font-bold">Target ROI</span>
+                <span class="block font-bold text-[#1b1b1b]">${project.roi}</span>
+              </div>
+            </div>
+            
+            <button onclick="enterDataRoom('${project.title}')" class="w-full text-center py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-sm shadow-sm transition flex justify-center items-center">
+              Enter Data Room <i class="ph-bold ph-arrow-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- Function: Render Initial Grids ---
+    function initMarketplace() {
+      // Render Featured
+      const featuredHtml = projectsDatabase.filter(p => p.featured).map(generateCardHTML).join('');
+      document.getElementById('featuredGrid').innerHTML = featuredHtml;
+      
+      // Render Full Catalog
+      renderCatalog(projectsDatabase);
+    }
+
+    // --- Function: Filter Logic ---
+    function applyFilters() {
+      // 1. Gather active filters from checkboxes
+      const activeFilters = {
+        tea: [],
+        asset: [],
+        stack: [],
+        struct: []
+      };
+      
+      document.querySelectorAll('.filter-cb:checked').forEach(cb => {
+        activeFilters[cb.dataset.group].push(cb.value);
+      });
+
+      // 2. Render active filter tags above grid
+      renderActiveFilterTags(activeFilters);
+
+      // 3. Filter database
+      let filtered = projectsDatabase.filter(project => {
+        let match = true;
+        if (activeFilters.tea.length > 0 && !activeFilters.tea.includes(project.teaStatus)) match = false;
+        if (activeFilters.asset.length > 0 && !activeFilters.asset.includes(project.assetClass)) match = false;
+        if (activeFilters.stack.length > 0 && !activeFilters.stack.includes(project.stack)) match = false;
+        if (activeFilters.struct.length > 0 && !activeFilters.struct.includes(project.structure)) match = false;
+        return match;
+      });
+
+      // 4. Update UI
+      renderCatalog(filtered);
+    }
+
+    function renderCatalog(projects) {
+      const grid = document.getElementById('catalogGrid');
+      const emptyState = document.getElementById('emptyState');
+      const countText = document.getElementById('resultCountText');
+
+      if (projects.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        countText.innerText = `0 projects found`;
+      } else {
+        emptyState.classList.add('hidden');
+        grid.innerHTML = projects.map(generateCardHTML).join('');
+        countText.innerText = `Showing ${projects.length} project${projects.length > 1 ? 's' : ''}`;
+      }
+    }
+
+    function renderActiveFilterTags(filters) {
+      const container = document.getElementById('activeFiltersContainer');
+      let tagsHtml = '';
+      
+      // Flatten filters for UI
+      for (const group in filters) {
+        filters[group].forEach(val => {
+          tagsHtml += `
+            <span class="inline-flex items-center px-2.5 py-1 rounded-sm text-xs font-medium bg-brand-100 text-brand-700">
+              ${val}
+              <button onclick="uncheckFilter('${group}', '${val}')" class="ml-1.5 hover:text-brand-900 focus:outline-none">
+                <i class="ph-bold ph-x"></i>
+              </button>
+            </span>
+          `;
+        });
+      }
+      container.innerHTML = tagsHtml;
+    }
+
+    function uncheckFilter(group, value) {
+      const cb = document.querySelector(`.filter-cb[data-group="${group}"][value="${value}"]`);
+      if(cb) {
+        cb.checked = false;
+        applyFilters();
+      }
+    }
+
+    function resetFilters() {
+      document.querySelectorAll('.filter-cb').forEach(cb => cb.checked = false);
+      applyFilters();
+    }
+
+    // --- Function: Bookmarking (Watchlist) ---
+    function toggleBookmark(projectId, btnElement) {
+      if (watchlist.has(projectId)) {
+        watchlist.delete(projectId);
+        btnElement.classList.remove('saved');
+        btnElement.innerHTML = `<i class="ph-bold ph-bookmark-simple text-xl"></i>`;
+      } else {
+        watchlist.add(projectId);
+        btnElement.classList.add('saved');
+        btnElement.innerHTML = `<i class="ph-fill ph-bookmark text-xl"></i>`;
+      }
+      
+      // Update badge counter
+      const count = watchlist.size;
+      const badge = document.getElementById('watchlistCount');
+      badge.innerText = count;
+      
+      // Pop animation on badge
+      badge.classList.remove('scale-100');
+      badge.classList.add('scale-125');
+      setTimeout(() => {
+        badge.classList.remove('scale-125');
+        badge.classList.add('scale-100');
+      }, 200);
+    }
+    
+    function toggleWatchlist() {
+      // In a real app, this would open a sidebar or route to a Watchlist page.
+      if (watchlist.size === 0) {
+        alert("Your watchlist is currently empty. Bookmark projects to save them here.");
+      } else {
+        const names = Array.from(watchlist).map(id => projectsDatabase.find(p => p.id === id).title);
+        alert(`Your Watchlist:\n- ${names.join('\n- ')}`);
+      }
+    }
+
+    // --- Action: Enter Data Room ---
+    function enterDataRoom(projectName) {
+      // In a real app, this routes to `ssa-due-diligence-answer-engine.html?project=...`
+      // We simulate navigation visually here.
+      const btn = event.currentTarget;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin mr-2"></i> Opening Room...`;
+      btn.classList.add('opacity-80');
+      
+      setTimeout(() => {
+        alert(`Navigating to the Due Diligence Answer Engine for:\n${projectName}`);
+        btn.innerHTML = originalText;
+        btn.classList.remove('opacity-80');
+      }, 800);
+    }
+
+    // Initialize on load
+    window.onload = initMarketplace;
+
+  </script>
+</body>
+</html>

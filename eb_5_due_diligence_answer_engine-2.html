@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB-5 Investor Data Room</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Public Sans"', '"Source Sans 3"', 'Arial', 'sans-serif'],
+        },
+        colors: {
+          brand: { 50: '#f5f8fa', 100: '#d6e3ec', 200: '#b8cfde', 300: '#7aa5c1', 400: '#3d7ca5', 500: '#005288', 600: '#003e67', 700: '#002b47', 800: '#001726', 900: '#000305' },
+          accent: { red: '#c41230', green: '#5e9732', gray: '#5a5b5d' }
+        }
+      }
+    }
+  }
+</script>
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!--
+  ============================================================================
+  EB-5 INVESTOR DATA ROOM PORTAL
+  Standalone Q&A engine with local seed data.
+  Updated to match USWDS / DHS branding and EB-5 Regional Center compliance.
+  ============================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ Brand tokens (USWDS / DHS Official Palette) ============ */
+:root {
+  --brand-primary: #005288; /* DHS Blue */
+  --brand-primary-dark: #003e67;
+  --brand-accent: #c41230; /* DHS Red */
+  --brand-green: #5e9732; /* DHS Green */
+  --bg: #f1f3f4;
+  --surface: #ffffff;
+  --raised: #f8f9fa;
+  --line: #c0c2c4;
+  --line-strong: #8c8e91;
+  --text: #1b1b1b;
+  --muted: #5a5b5d;
+  --faint: #71767a;
+  --focus: #7aa5c1;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: "Public Sans", "Source Sans 3", Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button, select, textarea, input { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+
+/* ============ Shared components ============ */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; 
+  border: 1px solid var(--line-strong); border-radius: 4px; 
+  padding: 0 16px; min-height: 38px; font-size: 14px; font-weight: 600; 
+  background: var(--surface); color: var(--text); transition: background 0.2s;
+}
+.btn:hover { background: var(--raised); }
+.btn-primary { 
+  background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); 
+}
+.btn-primary:hover { background: var(--brand-primary-dark); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700;
+  border-radius: 4px; padding: 4px 10px; min-height: 24px; letter-spacing: .02em; text-transform: uppercase;
+}
+.chip.outline { border: 1px solid var(--line-strong); color: var(--muted); }
+.chip.dashed { border: 1px dashed var(--line-strong); color: var(--muted); }
+.chip.approved { background: #e6f2eb; color: var(--brand-green); border: 1px solid #c2e0cd; }
+.chip.new { background: var(--brand-accent); color: #fff; }
+
+.empty { border: 2px dashed var(--line); border-radius: 4px; padding: 40px; text-align: center; color: var(--muted); background: var(--surface); }
+
+.seg { display: flex; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; width: fit-content; background: var(--surface); }
+.seg button { padding: 0 16px; min-height: 38px; font-size: 14px; font-weight: 600; color: var(--muted); border-right: 1px solid var(--line); transition: background 0.2s; }
+.seg button:last-child { border-right: none; }
+.seg button:hover { color: var(--text); background: var(--raised); }
+.seg button[aria-pressed="true"] { background: var(--brand-primary); color: #fff; }
+
+@keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 300;
+  background: var(--brand-primary-dark); border: 1px solid var(--brand-primary);
+  border-radius: 4px; padding: 14px 20px; font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15); animation: toastIn .25s ease both;
+}
+.toast .tdot { width: 8px; height: 8px; border-radius: 50%; background: #fff; flex-shrink: 0; }
+@keyframes winIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+.win-in { animation: winIn .3s ease both; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ============ Overlay / modal ============ */
+#scrim { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 186; opacity: 0; pointer-events: none; transition: opacity .2s; }
+#scrim.show { opacity: 1; pointer-events: auto; }
+#emailOvl {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(560px, 94vw);
+  max-height: 84vh; display: none; flex-direction: column; z-index: 187;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 12px 24px rgba(0,0,0,.2); overflow: hidden;
+}
+#emailOvl.show { display: flex; }
+.mo-head { display: flex; align-items: flex-start; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--bg); }
+.mo-head h5 { font-size: 16px; font-weight: 700; line-height: 1.3; flex: 1; color: var(--brand-primary); }
+.mo-close { width: 28px; height: 28px; border-radius: 4px; color: var(--muted); flex-shrink: 0; font-weight: bold; }
+.mo-close:hover { background: var(--line); color: var(--text); }
+.mo-body { overflow-y: auto; padding: 20px; }
+.email-meta { font-size: 13px; color: var(--muted); line-height: 1.9; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px; }
+.email-meta b { color: var(--text); font-weight: 600; }
+.email-body { font-size: 14px; color: var(--text); line-height: 1.7; }
+.email-body p { margin-bottom: 12px; }
+.email-cta { display: inline-block; margin-top: 12px; }
+
+/* notification bell - moved to global header */
+.bell-wrap { position: relative; }
+.bell-btn { width: 36px; height: 36px; border-radius: 4px; font-size: 18px; color: #fff; position: relative; border: 1px solid transparent; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); transition: background 0.2s; }
+.bell-btn:hover { background: rgba(255,255,255,0.2); }
+.bell-badge {
+  position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; border-radius: 99px;
+  background: var(--brand-accent); color: #fff;
+  font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 4px;
+  border: 2px solid var(--brand-primary);
+}
+.bell-badge[hidden] { display: none; }
+.bell-dd {
+  position: absolute; top: 48px; right: 0; width: 340px; z-index: 60; display: none;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--line-strong); border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.15); overflow: hidden;
+}
+.bell-dd.show { display: block; }
+.bell-dd-head { padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 700; background: var(--bg); color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.bell-dd-list { max-height: 280px; overflow-y: auto; }
+.bell-dd-item { width: 100%; text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); display: block; transition: background 0.2s; }
+.bell-dd-item:last-child { border-bottom: none; }
+.bell-dd-item:hover { background: var(--raised); }
+.bell-dd-item .bq { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--brand-primary); }
+.bell-dd-item .bm { font-size: 12px; color: var(--brand-green); margin-top: 6px; font-weight: 600; }
+.bell-dd-empty { padding: 24px 16px; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* My Questions tab */
+.mine-item { border-bottom: 1px solid var(--line); padding: 16px; display: flex; gap: 16px; align-items: flex-start; background: var(--surface); margin-bottom: 8px; border: 1px solid var(--line); border-radius: 4px; }
+.mine-item:last-child { margin-bottom: 0; }
+.mine-item .mi-body { flex: 1; }
+.mine-item h4 { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--brand-primary-dark); }
+.mine-item .mi-meta { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.chip.status-pending { border: 1px solid var(--line-strong); color: var(--muted); background: var(--bg); }
+.chip.status-answered { background: #e6f2eb; color: var(--brand-green); border: 1px solid #c2e0cd; }
+
+@keyframes flashHi { 0% { background: #eaf3f9; } 100% { background: transparent; } }
+.faq-item.flash { animation: flashHi 2s ease-out 2; border-left: 4px solid var(--brand-primary); }
+.inline-link { color: var(--brand-primary); text-decoration: underline; font: inherit; padding: 0; font-weight: 600; }
+
+.inv-wrap { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+.inv-hero { margin-bottom: 24px; }
+.inv-hero h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; color: var(--brand-primary-dark); }
+.inv-hero p { font-size: 15px; color: var(--muted); max-width: 72ch; line-height: 1.6; }
+.inv-tabs { margin-bottom: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+/* ---- Chat ---- */
+#invChatPane { display: flex; flex-direction: column; }
+.chat-window {
+  border: 1px solid var(--line-strong); border-radius: 4px; background: var(--surface);
+  min-height: 400px; max-height: 560px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02) inset;
+}
+.msg { display: flex; gap: 12px; max-width: 85%; }
+.msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.msg .bubble-ico { width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0; display: grid; place-items: center; font-size: 13px; font-weight: 700; border: 1px solid var(--line); }
+.msg.ai .bubble-ico { background: var(--bg); color: var(--brand-primary); border-color: var(--brand-primary); }
+.msg.user .bubble-ico { background: var(--muted); color: #fff; border-color: var(--muted); }
+.bubble { border-radius: 4px; padding: 12px 16px; font-size: 14px; line-height: 1.6; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.msg.ai .bubble { background: #f4f7f9; border: 1px solid #d6e3ec; color: var(--text); border-top-left-radius: 0; }
+.msg.user .bubble { background: var(--brand-primary); color: #fff; border-top-right-radius: 0; border: 1px solid var(--brand-primary-dark); }
+.bubble .src { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; border-top: 1px solid #d6e3ec; padding-top: 10px; }
+.bubble .helpful { margin-top: 10px; display: flex; gap: 12px; align-items: center; font-size: 12px; color: var(--muted); font-weight: 600; }
+.bubble .helpful button { color: var(--muted); font-size: 14px; }
+.bubble .helpful button:hover { color: var(--brand-primary); transform: scale(1.1); }
+.typing { display: flex; gap: 4px; padding: 6px 4px; }
+.typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--brand-primary); animation: tbounce 1.1s infinite ease-in-out; }
+.typing span:nth-child(2){ animation-delay: .15s; }
+.typing span:nth-child(3){ animation-delay: .3s; }
+@keyframes tbounce { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
+.escalate-note {
+  margin-top: 12px; border: 1px solid #f9c642; background: #fffcf0; border-radius: 4px; padding: 12px 16px;
+  display: flex; gap: 12px; align-items: flex-start; font-size: 13px; color: var(--text);
+}
+.escalate-note .em-ico { color: #d97706; font-size: 18px; }
+.escalate-note b { color: var(--brand-primary-dark); }
+
+.chat-input { display: flex; margin-top: 16px; gap: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.chat-input input {
+  flex: 1; min-height: 48px; border: 1px solid var(--line-strong); background: var(--surface);
+  color: var(--text); border-radius: 4px 0 0 4px; padding: 0 16px; font-size: 15px; border-right: none;
+}
+.chat-input input::placeholder { color: var(--faint); }
+.chat-input input:focus { border-color: var(--brand-primary); z-index: 2; border-right: 1px solid var(--brand-primary); }
+.chat-input button {
+  border-radius: 0 4px 4px 0; border: 1px solid var(--brand-primary); background: var(--brand-primary);
+  color: #fff; font-weight: 700; padding: 0 24px; min-height: 48px; font-size: 15px; transition: background 0.2s;
+}
+.chat-input button:hover { background: var(--brand-primary-dark); }
+.chat-suggest { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.chat-suggest button { border: 1px solid var(--line); background: var(--surface); border-radius: 4px; padding: 8px 14px; font-size: 13px; color: var(--muted); font-weight: 600; transition: all 0.2s; }
+.chat-suggest button:hover { border-color: var(--brand-primary); color: var(--brand-primary); background: var(--bg); }
+
+/* ---- Search ---- */
+.search-box { display: flex; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.search-box input {
+  flex: 1; min-height: 48px; border: 1px solid var(--line-strong); background: var(--surface);
+  color: var(--text); border-radius: 4px; padding: 0 16px; font-size: 15px;
+}
+.search-box input:focus { border-color: var(--brand-primary); }
+.search-box input::placeholder { color: var(--faint); }
+.search-count { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
+
+/* ---- FAQ list ---- */
+.faq-cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.faq-cat { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 4px; padding: 8px 16px; font-size: 14px; font-weight: 600; color: var(--muted); transition: all 0.2s; }
+.faq-cat:hover { color: var(--text); background: var(--raised); }
+.faq-cat[aria-pressed="true"] { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
+.faq-item { border: 1px solid var(--line); border-radius: 4px; margin-bottom: 8px; background: var(--surface); overflow: hidden; transition: box-shadow 0.2s; }
+.faq-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.faq-item:last-child { margin-bottom: 0; }
+.faq-q { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; padding: 16px; background: var(--surface); transition: background 0.2s; }
+.faq-q:hover { background: var(--raised); }
+.faq-q .fq-caret { color: var(--brand-primary); font-size: 14px; margin-top: 2px; transition: transform .2s; flex-shrink: 0; font-weight: bold; }
+.faq-item.open .fq-caret { transform: rotate(90deg); }
+.faq-q h4 { font-size: 15px; font-weight: 700; flex: 1; line-height: 1.4; color: var(--text); }
+.faq-a { display: none; padding: 0 16px 16px 36px; font-size: 14px; color: var(--text); line-height: 1.7; max-width: 80ch; border-top: 1px solid transparent; }
+.faq-item.open .faq-a { display: block; border-color: var(--line); padding-top: 16px; }
+.faq-meta { display: flex; gap: 8px; align-items: center; margin-top: 12px; flex-wrap: wrap; padding-top: 12px; border-top: 1px dashed var(--line); }
+.faq-more { text-align: center; padding: 24px; color: var(--muted); font-size: 14px; border: 2px dashed var(--line); margin-top: 16px; border-radius: 4px; font-weight: 600; background: var(--surface); }
+</style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <!-- US Government Banner Mock -->
+  <div class="bg-[#1b1b1b] text-white py-1.5 px-4 sm:px-6 lg:px-8 text-[11px] flex items-center space-x-2 z-50 relative">
+    <i class="ph-fill ph-flag text-[14px]"></i>
+    <span>An official platform for Immigrant Investor Program Compliance</span>
+  </div>
+
+  <!-- Public Header (Matches Marketplace) -->
+  <header class="bg-brand-500 border-b border-brand-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-white flex items-center justify-center text-brand-600 font-bold text-xl rounded-sm">
+            EB-5
+          </div>
+          <div>
+            <div class="font-bold text-white text-xl tracking-tight">Immigrant Investor Hub</div>
+            <p class="text-xs text-brand-100 uppercase tracking-widest font-semibold mt-0.5">Verified Project Marketplace</p>
+          </div>
+        </div>
+        
+        <!-- Navigation & E-Commerce Watchlist -->
+        <div class="flex items-center space-x-6 text-white font-medium text-sm">
+          <a href="#" class="hover:text-brand-100 transition hidden md:block">Onboarding Status</a>
+          <a href="#" class="hover:text-brand-100 transition hidden md:block">Resource Center</a>
+          
+          <div class="bell-wrap">
+            <button class="bell-btn" onclick="toggleBell()" id="bellBtn">
+              <i class="ph-bold ph-bell text-xl"></i>
+              <span class="bell-badge" id="bellBadge" hidden>0</span>
+            </button>
+            <div class="bell-dd" id="bellDd">
+              <div class="bell-dd-head">Answered since your last visit</div>
+              <div class="bell-dd-list" id="bellDdList"></div>
+            </div>
+          </div>
+          
+          <!-- User Profile -->
+          <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center border border-brand-400 cursor-pointer">
+            <i class="ph-fill ph-user text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+<div id="appMain" class="flex-1">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- Back button -->
+  <a href="eb5-marketplace.html" class="inline-flex items-center text-sm font-bold text-brand-600 hover:text-brand-800 transition hover:underline mb-6">
+    <i class="ph-bold ph-arrow-left mr-2"></i> Back to Marketplace Offerings
+  </a>
+
+  <!-- Hero Profile -->
+  <div class="bg-white rounded-sm border border-gray-300 shadow-sm overflow-hidden mb-8 flex flex-col md:flex-row">
+    <!-- Hero Graphic -->
+    <div class="md:w-[45%] h-64 md:h-auto bg-gray-200 relative shrink-0">
+      <img src="https://placehold.co/800x600/003e67/ffffff?text=Rural+Resort+Development" class="w-full h-full object-cover" alt="Project Hero">
+      <div class="absolute top-4 left-4 flex gap-2">
+        <span class="inline-flex items-center padding-px px-2 py-1 rounded-sm font-bold text-[10px] uppercase tracking-wider bg-brand-100 text-brand-700 border border-brand-300 shadow-sm bg-white/90 backdrop-blur-sm">Rural TEA</span>
+        <span class="inline-flex items-center padding-px px-2 py-1 rounded-sm font-bold text-[10px] uppercase tracking-wider bg-white/90 text-[#1b1b1b] border border-gray-200 shadow-sm backdrop-blur-sm"><i class="ph-fill ph-users mr-1 text-accent-green text-sm"></i> 140% Job Buffer</span>
+      </div>
+    </div>
+    <!-- Profile Details -->
+    <div class="p-6 lg:p-8 flex flex-col justify-center flex-1">
+      <span class="text-xs font-bold text-accent-gray uppercase tracking-wider mb-2">Real Estate · Regional Center</span>
+      <h1 class="text-2xl md:text-3xl font-bold text-[#1b1b1b] font-['Source_Sans_3'] mb-3">Yellowstone River Valley Rural Resort</h1>
+      <p class="text-sm md:text-base text-accent-gray mb-6 leading-relaxed">
+        A premier luxury hospitality development located in a designated Rural TEA, offering priority processing for I-526E petitions. Backed by Highland Hospitality Group, this project features a heavy equity commitment and a senior secured loan structure, providing robust downside protection and an exceptional 140% job creation cushion prior to operational stabilization.
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-auto border-t border-gray-100 pt-4">
+        <div>
+          <span class="block text-[10px] text-accent-gray uppercase font-bold">Invest</span>
+          <span class="block text-base md:text-lg font-bold text-[#1b1b1b]">$800,000</span>
+        </div>
+        <div class="border-l border-gray-200 pl-4">
+          <span class="block text-[10px] text-accent-gray uppercase font-bold">Position</span>
+          <span class="block text-base md:text-lg font-bold text-[#1b1b1b]">Senior Debt</span>
+        </div>
+        <div class="border-l border-gray-200 pl-4">
+          <span class="block text-[10px] text-accent-gray uppercase font-bold">Target ROI</span>
+          <span class="block text-base md:text-lg font-bold text-[#1b1b1b]">4.5%</span>
+        </div>
+        <div class="border-l border-gray-200 pl-4">
+          <span class="block text-[10px] text-accent-gray uppercase font-bold">Developer</span>
+          <span class="block text-base md:text-lg font-bold text-[#1b1b1b]">Highland Grp</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="inv-wrap pt-0">
+  <div class="inv-hero">
+    <h2 class="font-['Source_Sans_3'] text-2xl font-bold text-brand-600 mb-2">Search the Data Room</h2>
+    <p>Chat, search, or browse the verified FAQ library below. Every answer is sourced directly from the official Private Placement Memorandum (PPM), Economic Job Creation Report, and Escrow Agreements. Questions not currently in the knowledge base are automatically routed to our legal and finance teams (Julian and Sophia) for a verified response.</p>
+  </div>
+
+  <div class="seg inv-tabs" role="tablist">
+    <button aria-pressed="true" onclick="setInvTab('chat')" id="invTabChat">💬 Chat with Data Room</button>
+    <button aria-pressed="false" onclick="setInvTab('search')" id="invTabSearch">🔍 Search Documents</button>
+    <button aria-pressed="false" onclick="setInvTab('faq')" id="invTabFaq">📋 Browse FAQ</button>
+    <button aria-pressed="false" onclick="setInvTab('mine')" id="invTabMine">🕐 My Pending Questions</button>
+  </div>
+
+  <!-- CHAT -->
+  <div id="invChatPane">
+    <div class="chat-window" id="chatWindow"></div>
+    <div class="chat-input">
+      <input id="chatInput" type="text" placeholder="Ask a question about the EB-5 project..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()">Submit Question</button>
+    </div>
+    <div class="chat-suggest">
+      <button onclick="sendChat('What is the I-829 job creation buffer?')">What is the I-829 job creation buffer?</button>
+      <button onclick="sendChat('How is the capital stack structured?')">How is the capital stack structured?</button>
+      <button onclick="sendChat('When is my $800,000 released from escrow?')">When is my $800,000 released from escrow?</button>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div id="invSearchPane" hidden>
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="Search the compliance and diligence library..." oninput="renderSearch()">
+    </div>
+    <div class="search-count" id="searchCount"></div>
+    <div id="searchResults"></div>
+  </div>
+
+  <!-- FAQ -->
+  <div id="invFaqPane" hidden>
+    <div class="faq-cats" id="faqCats"></div>
+    <div id="faqList"></div>
+    <div class="faq-more">42 additional answers live in the full secure library — this view shows a representative sample of cleared diligence items.</div>
+  </div>
+
+  <!-- MY QUESTIONS -->
+  <div id="invMinePane" hidden>
+    <div id="mineList"></div>
+  </div>
+</div>
+
+<!-- Email preview modal (escalation alert preview) -->
+<div id="scrim" onclick="closeModals()"></div>
+<div id="emailOvl">
+  <div class="mo-head">
+    <h5 id="emailSubject">System Notification Preview</h5>
+    <button class="mo-close" onclick="closeModals()">✕</button>
+  </div>
+  <div class="mo-body" id="emailBody"></div>
+</div>
+
+</div><!-- /#appMain -->
+
+<script>
+/* ============================================================
+   EB-5 Due Diligence Q&A Engine
+   ============================================================ */
+const CATS = ["Capital Stack", "Job Creation (I-829)", "Immigration / Legal", "Project Timeline", "Escrow & Refunds", "Market / Underwriting"];
+
+const SEED_FAQ = [
+  {q:"What is the job creation buffer for this project?", a:"According to the Economic Impact Report, the project creates an estimated 1,420 qualifying jobs via hard construction expenditures alone. With a maximum of 100 EB-5 investors requiring 1,000 jobs, this provides a 42% job cushion before operational revenues are even factored in.", cat:"Job Creation (I-829)", by:"Julian Ross", updated:"Sep 2026"},
+  {q:"How is the capital stack structured?", a:"The total project cost is $150M. $80M is Senior Bank Debt (53.3%), $40M is Developer Equity (26.6%), and $30M is EB-5 Capital (20%). The EB-5 capital sits in a 2nd lien position secured by the underlying real estate asset.", cat:"Capital Stack", by:"Sophia Lin", updated:"Aug 2026"},
+  {q:"Does this project qualify for the Rural TEA 20% visa set-aside?", a:"Yes. The project is located in a designated Rural area outside of any Metropolitan Statistical Area (MSA) with a population under 20,000. A verified TEA designation letter is available in the 'Immigration / Legal' folder of the data room.", cat:"Immigration / Legal", by:"Julian Ross", updated:"Sep 2026"},
+  {q:"When is my $800,000 capital released from escrow?", a:"Capital is held in a secure third-party escrow account at J.P. Morgan. It is only released to the project developer upon the issuance of your I-526E receipt notice from USCIS. If you do not receive a receipt, the funds remain in escrow.", cat:"Escrow & Refunds", by:"Sophia Lin", updated:"Jul 2026"},
+  {q:"What happens to my investment if my I-526E petition is denied by USCIS?", a:"The Limited Partnership Agreement (LPA) includes a strict I-526E Denial Guaranty. If your petition is denied for reasons outside of fraud or misrepresentation, the developer is required to refund your $800,000 principal plus administrative fees within 90 days.", cat:"Escrow & Refunds", by:"Julian Ross", updated:"Aug 2026"},
+  {q:"What is the projected timeline for capital return?", a:"The EB-5 loan term is 5 years, with two optional 1-year extensions. Capital return is targeted for Year 5, typically funded through a refinance of the stabilized property or asset sale.", cat:"Project Timeline", by:"Sophia Lin", updated:"Aug 2026"},
+  {q:"Has the project broken ground yet?", a:"Yes. Vertical construction commenced in Q2 2026. Because EB-5 jobs are created based on construction spend, jobs are already actively being created for incoming investors. Live webcam feeds are available in the data room.", cat:"Project Timeline", by:"Julian Ross", updated:"Sep 2026"},
+  {q:"Can I file my I-485 concurrently if I invest in this project?", a:"Yes. Because this is a Rural TEA project, the visa category is currently 'Current' for all nationalities (including India and China). If you are legally present in the U.S. (e.g., on an H-1B or F-1 visa), you can file your I-526E and I-485 adjustment of status concurrently.", cat:"Immigration / Legal", by:"Julian Ross", updated:"Sep 2026"},
+  {q:"Is the developer contributing cash equity?", a:"Yes, the developer has contributed $40M in hard cash equity, representing over 26% of the total capitalization. This ensures strong alignment of interest with EB-5 limited partners.", cat:"Capital Stack", by:"Sophia Lin", updated:"Jun 2026"},
+  {q:"Who is conducting the third-party fund administration?", a:"NES Financial (a JTC Company) serves as the independent third-party fund administrator. They provide quarterly reporting and ensure EB-5 funds are only deployed for approved construction expenses.", cat:"Immigration / Legal", by:"Sophia Lin", updated:"Jul 2026"}
+];
+
+function seedFaqWithIds(){
+  return JSON.parse(JSON.stringify(SEED_FAQ)).map((item,idx)=>({ ...item, id:`seed-${idx+1}` }));
+}
+
+let state = {
+  faq: seedFaqWithIds(),
+  pending: [],
+  myQuestions: [],
+  unread: [],
+  seq: 1000
+};
+
+function init(){
+  document.getElementById('chatWindow').innerHTML='';
+  addAiBubble("Hello Arjun — I am the EB-5 Diligence Assistant. I search the Private Placement Memorandum, Economic Report, and Escrow Agreements before answering. How can I help you evaluate the Yellowstone project today?", null);
+  renderFaq(); renderSearch(); renderMyQuestions(); renderBell();
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+function setInvTab(t){
+  document.getElementById('invChatPane').hidden = t!=='chat';
+  document.getElementById('invSearchPane').hidden = t!=='search';
+  document.getElementById('invFaqPane').hidden = t!=='faq';
+  document.getElementById('invMinePane').hidden = t!=='mine';
+  ['Chat','Search','Faq','Mine'].forEach(k=>document.getElementById('invTab'+k).setAttribute('aria-pressed', k.toLowerCase()===t));
+  if(t==='search') renderSearch();
+  if(t==='faq') renderFaq();
+  if(t==='mine') renderMyQuestions();
+}
+
+/* ============================================================
+   Chat + Local matching engine
+   ============================================================ */
+function addAiBubble(html, srcItem){
+  const w = document.getElementById('chatWindow');
+  const row = document.createElement('div');
+  row.className = 'msg ai win-in';
+  row.innerHTML = `<div class="bubble-ico"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg></div><div class="bubble">${html}${srcItem?`
+    <div class="src"><span class="chip approved">✓ Verified Document</span><span class="chip outline">${srcItem.cat}</span><span class="chip dashed">Reviewed By ${srcItem.by} · ${srcItem.updated}</span></div>
+    <div class="helpful"><span>Does this answer your concern?</span><button>👍</button><button>👎</button></div>`:''}</div>`;
+  w.appendChild(row);
+  w.scrollTop = w.scrollHeight;
+}
+function addUserBubble(text){
+  const w = document.getElementById('chatWindow');
+  const row = document.createElement('div');
+  row.className = 'msg user win-in';
+  row.innerHTML = `<div class="bubble-ico">AD</div><div class="bubble"></div>`;
+  row.querySelector('.bubble').textContent = text;
+  w.appendChild(row);
+  w.scrollTop = w.scrollHeight;
+}
+const STOPWORDS = new Set(["what","your","have","this","that","about","does","with","from","were","will","they","them","their","would","could","should","there","which","when","where","been","being","some","also","into","than","then","just","much","many","most","only","over","such","very","during","current","currently"]);
+function matchFaq(text){
+  const words = text.toLowerCase().replace(/[^\w\s-]/g,'').split(/\s+/).filter(w=>w.length>3 && !STOPWORDS.has(w));
+  if(!words.length) return null;
+  let best=null, bestScore=0;
+  state.faq.forEach(item=>{
+    const hayQ = item.q.toLowerCase();
+    const hayA = item.a.toLowerCase();
+    let score = 0;
+    words.forEach(w=>{ if(hayQ.includes(w)) score+=2; else if(hayA.includes(w)) score+=1; });
+    if(score>bestScore){ bestScore=score; best=item; }
+  });
+  return bestScore>=3 ? best : null;
+}
+function sendChat(preset){
+  const input = document.getElementById('chatInput');
+  const text = (preset!==undefined ? preset : input.value).trim();
+  if(!text) return;
+  addUserBubble(text);
+  input.value='';
+  const w = document.getElementById('chatWindow');
+  const typing = document.createElement('div');
+  typing.className='msg ai';
+  typing.innerHTML = `<div class="bubble-ico"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg></div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  w.appendChild(typing); w.scrollTop = w.scrollHeight;
+
+  setTimeout(()=>{
+    typing.remove();
+    const match = matchFaq(text);
+    if(match){
+      addAiBubble(match.a, match);
+    } else {
+      const qid = state.seq++;
+      const cat = guessCat(text);
+      addAiBubble(`I don't have a verified answer for that specific diligence item yet.
+        <div class="escalate-note"><span class="em-ico">⚠</span><div><b>Julian and Sophia have been notified</b> — I've routed your question to our underwriting and legal team. I will email <b>you</b> the moment they clear the answer, and you'll find it waiting in <button class="inline-link" onclick="setInvTab('mine')">My Pending Questions</button>. <a href="#" onclick="openEscalationEmail('${escapeAttr(text)}', ${qid}, '${escapeAttr(cat)}');return false;" style="color:var(--brand-primary);text-decoration:underline; font-weight: 600;">View the internal alert email they received →</a></div></div>`, null);
+      state.pending.push({ id: qid, q:text, cat });
+      state.myQuestions.push({ id: qid, q:text, status:'pending', faqId:null });
+      renderMyQuestions();
+    }
+  }, 1000 + Math.random()*500);
+}
+function guessCat(text){
+  const t = text.toLowerCase();
+  if(/job|i-829|cushion|buffer|construction/.test(t)) return 'Job Creation (I-829)';
+  if(/cap table|equity|debt|lien|senior/.test(t)) return 'Capital Stack';
+  if(/escrow|refund|denial|release/.test(t)) return 'Escrow & Refunds';
+  if(/timeline|ground|built|return/.test(t)) return 'Project Timeline';
+  if(/rural|tea|i-485|concurrent|attorney/.test(t)) return 'Immigration / Legal';
+  return 'Market / Underwriting';
+}
+function escapeAttr(s){ return String(s).replace(/'/g,"\\'"); }
+
+/* ============================================================
+   Search & FAQ Panes
+   ============================================================ */
+function renderSearch(){
+  const q = (document.getElementById('searchInput')?.value||'').toLowerCase();
+  const results = q ? state.faq.filter(i=> (i.q+' '+i.a).toLowerCase().includes(q)) : state.faq;
+  document.getElementById('searchCount').textContent = q ? `${results.length} diligence match${results.length!==1?'es':''} for "${q}"` : `${results.length} verified items in the data room`;
+  const el = document.getElementById('searchResults');
+  el.innerHTML = results.map(i=>`
+    <div class="faq-item">
+      <div class="faq-q"><span class="fq-caret">▸</span><h4>${i.q}</h4></div>
+      <div class="faq-a" style="display:block;padding-left:36px; border-top: 1px solid var(--line); padding-top:16px;">${i.a}
+        <div class="faq-meta"><span class="chip outline">${i.cat}</span><span class="chip dashed">Reviewed By ${i.by} · ${i.updated}</span></div>
+      </div>
+    </div>`).join('') || `<div class="empty">No direct matches found in current documents. Try asking in the Chat tab to request a legal review.</div>`;
+}
+
+let activeCat = 'All';
+function renderFaq(){
+  const catsEl = document.getElementById('faqCats');
+  const cats = ['All', ...CATS];
+  catsEl.innerHTML = cats.map(c=>`<button class="faq-cat" aria-pressed="${c===activeCat}" onclick="setFaqCat('${c}')">${c}</button>`).join('');
+  const list = activeCat==='All' ? state.faq : state.faq.filter(i=>i.cat===activeCat);
+  const el = document.getElementById('faqList');
+  el.innerHTML = list.map(i=>`
+    <div class="faq-item" id="faqitem-${i.id}">
+      <button class="faq-q" onclick="toggleFaq('${i.id}')"><span class="fq-caret">▸</span><h4>${i.q} ${i.isNew?'<span class=\"chip new\">NEWLY ANSWERED</span>':''}</h4></button>
+      <div class="faq-a">${i.a}
+        <div class="faq-meta"><span class="chip outline">${i.cat}</span><span class="chip dashed">Reviewed By ${i.by} · ${i.updated}</span></div>
+      </div>
+    </div>`).join('');
+}
+function setFaqCat(c){ activeCat=c; renderFaq(); }
+function toggleFaq(id){ document.getElementById('faqitem-'+id).classList.toggle('open'); }
+
+/* ============================================================
+   Notification bell + My Questions
+   ============================================================ */
+function toggleBell(){ document.getElementById('bellDd').classList.toggle('show'); }
+function renderBell(){
+  const badge = document.getElementById('bellBadge');
+  const n = state.unread.length;
+  badge.hidden = n===0;
+  badge.textContent = n;
+  const list = document.getElementById('bellDdList');
+  if(!n){
+    list.innerHTML = `<div class="bell-dd-empty">No new responses from the underwriting team.</div>`;
+    return;
+  }
+  list.innerHTML = state.unread.map(faqId=>{
+    const item = state.faq.find(f=>f.id===faqId);
+    if(!item) return '';
+    return `<button class="bell-dd-item" onclick="openAnswer('${faqId}')"><div class="bq">${item.q}</div><div class="bm">✓ Cleared by Legal · View Document →</div></button>`;
+  }).join('');
+}
+function renderMyQuestions(){
+  const el = document.getElementById('mineList');
+  if(!state.myQuestions.length){
+    el.innerHTML = `<div class="empty">You haven't requested any custom diligence items yet. Ask a new question in the Chat to track it here.</div>`;
+    return;
+  }
+  el.innerHTML = state.myQuestions.slice().reverse().map(m=>`
+    <div class="mine-item">
+      <div class="mi-body">
+        <h4>${m.q}</h4>
+        <div class="mi-meta">${m.status==='answered' ? '✓ Legal response verified' : '⏳ Routed to Julian & Sophia · Avg processing 24 hours'}</div>
+      </div>
+      ${m.status==='answered'
+        ? `<span class="chip status-answered">Documented</span><button class="btn btn-primary" onclick="openAnswer('${m.faqId}')">View Analysis →</button>`
+        : `<span class="chip status-pending">Under Review</span>`}
+    </div>`).join('');
+}
+function openAnswer(faqId){
+  closeModals();
+  setInvTab('faq');
+  activeCat = 'All';
+  renderFaq();
+  state.unread = state.unread.filter(id=>id!==faqId);
+  renderBell();
+  document.getElementById('bellDd').classList.remove('show');
+  setTimeout(()=>{
+    const el = document.getElementById('faqitem-'+faqId);
+    if(!el) return;
+    el.classList.add('open');
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'), 3700);
+  }, 60);
+}
+document.addEventListener('click', (e)=>{
+  const wrap = document.querySelector('.bell-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('bellDd')?.classList.remove('show');
+});
+
+/* ============================================================
+   Email preview modals
+   ============================================================ */
+function openEscalationEmail(question, qid, cat){
+  document.getElementById('emailSubject').textContent = 'Internal Escalation: New EB-5 Diligence Query';
+  document.getElementById('emailBody').innerHTML = `
+    <div class="email-meta">
+      <div><b>From:</b> EB-5 Data Room Bot &lt;system@eb5-intelligence.hub&gt;</div>
+      <div><b>To:</b> Julian Ross (Compliance), Sophia Lin (Underwriting)</div>
+      <div><b>Subject:</b> Action Required: Unmapped Investor Question — Arjun Desai</div>
+    </div>
+    <div class="email-body">
+      <p>Julian &amp; Sophia,</p>
+      <p>An active EB-5 prospect (Arjun Desai) asked a question that the current data room documents cannot satisfy:</p>
+      <p style="border-left: 3px solid var(--brand-accent); padding-left: 14px; color: var(--brand-primary-dark); font-style: italic; background: #fdf2f4; padding: 10px; border-radius: 4px;">"${question}"</p>
+      <p>Please review the legal and financial models, provide a verified response, and map it to the <strong>${cat}</strong> category. Arjun will be notified automatically once approved.</p>
+      <a class="btn btn-primary email-cta" href="#" onclick="alert('This would open the internal GoHighLevel or PLANA dashboard to answer the question.');return false;">Open in Management Console →</a>
+    </div>`;
+  document.getElementById('scrim').classList.add('show');
+  document.getElementById('emailOvl').classList.add('show');
+}
+function closeModals(){
+  document.getElementById('scrim').classList.remove('show');
+  document.getElementById('emailOvl').classList.remove('show');
+}
+function showToast(msg, ms){
+  const t = document.createElement('div');
+  t.className='toast';
+  t.innerHTML = `<span class="tdot"></span>${msg}`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), ms||3800);
+}
+
+init();
+</script>
+</body>
+</html>
